@@ -1,0 +1,16 @@
+/* Exemplo de estrutura Flexbox no index.css */
+.main-wrapper {
+  display: flex;
+  min-height: calc(100vh - 120px); /* Ajusta conforme a altura do header/footer */
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.main-aside {
+  width: 250px;
+  background-color: #f0f0f0;
+}

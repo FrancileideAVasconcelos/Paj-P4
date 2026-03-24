@@ -1,0 +1,162 @@
+/* src/styles/admin.css */
+
+.admin-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.admin-title {
+    margin-bottom: 5px;
+    color: #333;
+    font-size: 24px;
+}
+
+.admin-subtitle {
+    margin-bottom: 20px;
+    color: #666;
+    font-size: 14px;
+}
+
+/* LISTA DE UTILIZADORES */
+.users-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* CARTÃO DO UTILIZADOR */
+.user-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.card-active {
+    background-color: #ffffff;
+}
+
+/* Dá um aspeto ligeiramente "apagado" aos inativos */
+.card-inactive {
+    background-color: #f9f9f9;
+    opacity: 0.85;
+}
+
+/* O tal efeito de hover para interatividade */
+.user-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* ESQUERDA: FOTO E DETALHES */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #eee;
+}
+
+.user-details h3 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.user-details p {
+    margin: 4px 0 0 0;
+    color: #7f8c8d;
+    font-size: 13px;
+}
+
+.admin-badge {
+    margin-left: 8px;
+    color: #2980b9;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* DIREITA: BOTÕES E ESTADO */
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* ETIQUETAS DE ESTADO */
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.badge-active {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.badge-inactive {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+/* BOTÕES DE AÇÃO */
+.btn-inativar, .btn-reativar, .btn-apagar {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    transition: filter 0.2s ease;
+}
+
+/* Um hover simples para os botões usando filtro de brilho */
+.btn-inativar:hover, .btn-reativar:hover, .btn-apagar:hover {
+    filter: brightness(0.9);
+}
+
+.btn-inativar {
+    background-color: #f39c12; /* Laranja */
+}
+
+.btn-reativar {
+    background-color: #27ae60; /* Verde */
+}
+
+.btn-apagar {
+    background-color: #e74c3c; /* Vermelho */
+}
+
+/* UTILITÁRIOS E TEXTOS DE ESTADO */
+.empty-list-text, .loading-text {
+    text-align: center;
+    color: #999;
+    padding: 20px;
+    font-style: italic;
+}
+
+.alert-error {
+    background-color: #fde8e8;
+    color: #c0392b;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #fadbd8;
+    margin-bottom: 20px;
+}

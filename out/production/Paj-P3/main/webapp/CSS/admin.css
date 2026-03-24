@@ -1,0 +1,43 @@
+/* admin.css */
+
+.user-card {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 5px solid #000080;
+}
+
+.user-card h3 {
+    margin: 0 0 5px 0;
+}
+
+/* O contentor que segura os dois cartões lado a lado */
+.cards-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap; /* Permite que caiam um para baixo do outro em ecrãs pequenos */
+}
+
+/* O cartão individual (tanto para Clientes como para Leads) */
+.info-card {
+    flex: 1; /* Faz com que ambos os cartões ocupem o mesmo espaço (50/50) */
+    min-width: 300px; /* Garante que não ficam demasiado estreitos antes de quebrarem para a linha de baixo */
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* Pequenas diferenças estéticas nos topos (opcional, para distinguir visualmente) */
+.info-card.clientes {
+    border-top: 4px solid #5bc0de;
+}
+
+.info-card.leads {
+    border-top: 4px solid #5cb85c;
+}

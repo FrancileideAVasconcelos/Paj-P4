@@ -1,0 +1,75 @@
+/* index.css */
+:root {
+    /* Cores Principais (Baseadas no teu azul atual) */
+    --primary-color: rgb(102, 104, 107);    /* O azul do Header/Aside */
+    --primary-dark: #818185;              /* Um azul mais escuro para hovers */
+    --accent-color: #7fa5da;               /* Um azul mais vivo para detalhes */
+
+    /* Cores de Fundo */
+    --bg-main: #dadadf;                    /* O cinza de fundo da app */
+    --bg-card: #ffffff;                    /* Branco para os cards/formulários */
+    --bg-footer: #f8f9fa;                  /* Cinza claro do footer */
+
+    /* Cores de Texto */
+    --text-main: #333333;                  /* Texto escuro principal */
+    --text-muted: #666666;                 /* Texto secundário/cinzento */
+    --text-on-primary: #ffffff;            /* Texto branco sobre fundos escuros */
+
+    /* Cores de Estado (Dashboard) */
+    --color-success: #28a745;              /* Verde para Leads Ganhas */
+    --color-warning: #fd7e14;              /* Laranja para Leads Novas */
+    --color-danger: #e74c3c;               /* Vermelho para Logout/Erros */
+
+    /* Medidas de Layout */
+    --header-height: 90px;                 /* Para controlares a altura do header */
+    --sidebar-width: 220px;
+}
+
+
+/* index.css */
+
+/* Estilo para Desktop (o que já tens) */
+.layout-grid {
+    display: grid;
+    grid-template-columns: var(--sidebar-width) 1fr;
+    grid-template-areas:
+    "header header"
+    "aside  main"
+    "footer footer";
+    height: 100vh;
+}
+
+/* --- RESPONSIVIDADE (Mobile) --- */
+@media (max-width: 768px) {
+    .layout-grid {
+        grid-template-columns: 1fr; /* Apenas uma coluna */
+        grid-template-areas:
+      "header"
+      "main"
+      "footer";
+    }
+
+    .main-aside {
+        position: fixed; /* O sidebar flutua sobre o site */
+        left: -100%;    /* Começa escondido à esquerda */
+        top: var(--header-height);
+        width: 80%;      /* Ocupa quase toda a largura */
+        height: calc(100vh - var(--header-height));
+        z-index: 1000;
+        transition: left 0.3s ease; /* Animação suave */
+    }
+
+    /* Quando a classe 'open' for adicionada via React */
+    .main-aside.open {
+        left: 0;
+    }
+}
+
+.content {
+    grid-area: main;
+    padding: 20px;
+    overflow-y: auto; /* Permite scroll se os cards forem muitos */
+    background-color: var(--bg-main);
+    width: 100%;
+    height: 100vh;
+}
