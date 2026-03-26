@@ -1,13 +1,13 @@
 /* index.css */
 :root {
     /* Cores Principais (Baseadas no teu azul atual) */
-    --primary-color: rgb(102, 104, 107);    /* O azul do Header/Aside */
-    --primary-dark: #818185;              /* Um azul mais escuro para hovers */
-    --accent-color: #7fa5da;               /* Um azul mais vivo para detalhes */
+    --primary-color: #4f7c99;    /* O azul do Header/Aside */
+    --primary-dark: #275973;              /* Um azul mais escuro para hovers */
+    --accent-color: #76a0be;               /* Um azul mais vivo para detalhes */
 
     /* Cores de Fundo */
-    --bg-main: #dadadf;                    /* O cinza de fundo da app */
-    --bg-card: #ffffff;                    /* Branco para os cards/formulários */
+    --bg-main: #e2e7e8;                    /* O cinza de fundo da app */
+    --bg-card: #f7f7fa;                    /* Branco para os cards/formulários */
     --bg-footer: #f8f9fa;                  /* Cinza claro do footer */
 
     /* Cores de Texto */

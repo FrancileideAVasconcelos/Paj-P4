@@ -133,7 +133,6 @@ public class AdminService extends BaseService {
 
         validarAdmin(token);
 
-
             adminBean.editarClienteAdmin(idCliente, dto);
             return Response.status(Response.Status.OK).entity("Cliente atualizado com sucesso (Admin).").build();
 

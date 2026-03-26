@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import {api} from "../services/api.js";
 
-// LeadStore.js
-const leadStore = create((set, get) => ({
+// useLeadStore.js
+const useLeadStore = create((set, get) => ({
     leads: [],
     currentLead: null, // Armazena a lead selecionada
     loading: false,
@@ -88,4 +88,4 @@ const leadStore = create((set, get) => ({
 
 }));
 
-export default leadStore;
+export default useLeadStore;

@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import {api} from "../services/api.js";
 
 
-const clientStore = create((set, get) => ({
+const useClientStore = create((set, get) => ({
     clients: [], // Nome no plural para ser consistente
     currentClient: null, // Armazena o cliente selecionada
     loading: false,
@@ -79,7 +79,7 @@ const clientStore = create((set, get) => ({
 
 }));
 
-export default clientStore;
+export default useClientStore;
 
 
 

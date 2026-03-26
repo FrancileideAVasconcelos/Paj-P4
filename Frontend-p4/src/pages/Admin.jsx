@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { useNavigate } from "react-router-dom";
-import useAdminStore from '../store/AdminStore.js';
+import useAdminStore from '../store/useAdminStore.js';
 import tokenStore from '../store/tokenStore.js';
 import '../styles/AsideFooterHeader.css'; // Mantém os globais se precisares
 import '../styles/Admin.css'; // O teu novo ficheiro de estilos! (Ajusta o caminho se necessário)
@@ -49,7 +49,7 @@ export default function Admin() {
     return (
         <div className="main-content">
             <div className="admin-container">
-                <h2 className="admin-title">Equipa e Utilizadores</h2>
+                <h2 className="admin-title">Utilizadores</h2>
 
                 {error && <div className="alert-message alert-error">{error}</div>}
 

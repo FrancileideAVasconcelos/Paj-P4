@@ -33,7 +33,7 @@ public class LeadDao extends DefaultDao<LeadEntity> implements Serializable {
         entity.setUser(u);
         entity.setIsAtivo(true);
 
-        em.persist(lead);
+        persist(entity);
     }
 
     public void updateLead(LeadEntity leadAtual, LeadDto dtoNovo) {

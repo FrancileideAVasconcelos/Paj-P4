@@ -32,6 +32,8 @@ export default function AppRoutes({ token }) {
             <Route path="/admin" element={token ? <Admin /> : <Navigate to="/login" />} />
 
             <Route path="/admin/user/:username" element={token ? <AdminUserDetails /> : <Navigate to="/login" />} />
+
+
             {/* Redirecionamento Inicial */}
             <Route path="/" element={<Navigate to={token ? "/dashboard" : "/login"} />} />
 

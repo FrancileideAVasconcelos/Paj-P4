@@ -160,3 +160,176 @@
     border: 1px solid #fadbd8;
     margin-bottom: 20px;
 }
+
+/* =========================================
+   ESTILOS DOS DETALHES DO UTILIZADOR
+   ========================================= */
+
+.details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.details-header h2 {
+    font-size: 24px;
+    color: #000;
+    margin: 0;
+}
+
+.btn-voltar {
+    background-color: var(--primary-dark);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-voltar:hover {
+    background-color: var(--accent-color);
+}
+
+/* CARTÃO DE PERFIL (Topo) */
+.profile-detail-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-card);
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border-left: 6px solid var(--primary-dark); /* A barra azul lateral */
+    margin-bottom: 25px;
+}
+
+.profile-detail-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile-detail-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.profile-detail-info h3 {
+    margin: 0 0 10px 0;
+    font-size: 20px;
+    color: #333;
+}
+
+.profile-detail-contacts {
+    display: flex;
+    gap: 15px;
+    color: #666;
+    font-size: 14px;
+}
+
+.profile-detail-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn-action-inativar, .btn-action-excluir {
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    min-width: 160px;
+}
+
+.btn-action-inativar {
+    background-color: var(--primary-dark);
+}
+
+.btn-action-excluir {
+    background-color: var(--primary-dark);
+}
+
+/* RECIPIENTE DOS CARTÕES DE DADOS */
+.data-cards-container {
+    display: flex;
+    gap: 20px;
+}
+
+.data-card {
+    flex: 1;
+    background-color: var(--bg-card);
+    border-radius: 8px;
+    border-top: 6px solid var(--primary-dark);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    padding: 20px;
+}
+
+.data-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.data-card-header h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+/* Botõezinhos redondos de ação */
+.data-card-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.icon-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.green-btn { background-color: var(--color-success); }
+.orange-btn { background-color: var(--color-warning); }
+.red-btn { background-color: var(--color-danger); }
+
+.empty-text {
+    color: #999;
+    font-size: 14px;
+}
+
+.data-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.data-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid #f9f9f9;
+    font-size: 14px;
+}
+.filtro {
+    padding: 5px;
+    background-color: var(--bg-card);
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 13px;
+}

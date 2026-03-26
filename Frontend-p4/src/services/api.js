@@ -28,11 +28,10 @@ const apiRequest = async (endpoint, options = {}) => {
             throw new Error(text || `Erro: ${response.status}`);
         }
 
-        // 2. Tentamos converter para JSON, se falhar, devolvemos o texto original
         try {
             return text ? JSON.parse(text) : null;
         } catch (e) {
-            return text; // Retorna a String "Lead adicionada..." sem dar erro
+            return text;
         }
     } catch (error) {
         console.error("API Error:", error);
@@ -43,12 +42,8 @@ const apiRequest = async (endpoint, options = {}) => {
 // Helpers para facilitar o uso (AGORA ACEITAM OPÇÕES EXTRA COMO HEADERS)
 export const api = {
     get: (url, options = {}) => apiRequest(url, { method: 'GET', ...options }),
-
     post: (url, body, options = {}) => apiRequest(url, { method: 'POST', body: JSON.stringify(body), ...options }),
-
     put: (url, body, options = {}) => apiRequest(url, { method: 'PUT', body: JSON.stringify(body), ...options }),
-
     delete: (url, options = {}) => apiRequest(url, { method: 'DELETE', ...options }),
-
     patch: (endpoint, body, options = {}) => apiRequest(endpoint, { method: 'PATCH', body: JSON.stringify(body), ...options }),
 };

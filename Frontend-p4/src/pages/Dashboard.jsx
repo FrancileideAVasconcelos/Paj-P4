@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Importamos o hook de navegação
-import leadStore from "../store/LeadStore.js";
+import useLeadStore from "../store/useLeadStore.js";
 import tokenStore from "../store/tokenStore.js";
-import clientStore from "../store/ClientStore.js";
+import useClientStore from "../store/useClientStore.js";
 import '../styles/Dashboard.css';
 
 export default function Dashboard(){
     const navigate = useNavigate(); // Inicializamos a navegação
-    const { leads, fetchLeads } = leadStore();
-    const { clients, fetchClient } = clientStore();
+    const { leads, fetchLeads } = useLeadStore();
+    const { clients, fetchClient } = useClientStore();
     const token = tokenStore((state) => state.token);
 
     useEffect(() => {
