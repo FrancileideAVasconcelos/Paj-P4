@@ -7,6 +7,7 @@ import '../styles/admin.css';
 import { STATUS_OPTIONS } from "../utils/constants.js";
 import ListClientLeadAdmin from '../components/ListClientLeadAdmin.jsx'; // <-- O teu novo componente!
 import FormModal from "./formModal.jsx";
+import useFormModal from "../hooks/useFormModal.js";
 
 export default function AdminUserDetails() {
     const { username } = useParams();
@@ -14,25 +15,37 @@ export default function AdminUserDetails() {
     const token = tokenStore((state) => state.token);
     const [filtro, setFiltro] = useState("");
 
-    // --- ESTADOS DO MODAL DE EDIÇÃO ---
-    const [modalAberto, setModalAberto] = useState(false);
-    const [itemEmEdicao, setItemEmEdicao] = useState(null); // Guarda os dados a ser editados
-    const [itemOriginal, setItemOriginal] = useState(null); // <-- ADICIONA ESTE NOVO!
-    const [tipoEdicao, setTipoEdicao] = useState(""); // Vai ser 'client' ou 'lead'
-
     const {
         users, userClients, userLeads, loadingDetails, fetchUserDetails, clearUserDetails, error,
-        toggleClientStatus, deleteClientPermanent, toggleLeadStatus, deleteLeadPermanent,
-        editClientAdmin, editLeadAdmin
-        } = useAdminStore();
+        editClientAdmin, editLeadAdmin, deleteUser, reactivateUser, fetchUsers,
+        toggleItemStatus, deleteItemPermanent, toggleAllItemsStatus, deleteAllItemsPermanent
+    } = useAdminStore();
 
     const selectedUser = users.find(u => u.username === username) || {};
 
+    // Hook exclusivo para Clientes (passamos a função editClientAdmin)
+    const clientModal = useFormModal(
+        async () => {}, // Função vazia porque o admin não cria clientes aqui
+        (t, id, data) => editClientAdmin(t, username, id, data), // Injetamos o username que o Java pede!
+        token
+    );
+
+    // Hook exclusivo para Leads (passamos a função editLeadAdmin)
+    const leadModal = useFormModal(
+        async () => {}, // Função vazia porque o admin não cria leads aqui
+        (t, id, data) => editLeadAdmin(t, username, id, data), // Injetamos o username que o Java pede!
+        token
+    );
+
     useEffect(() => {
         if (!token) return navigate('/login');
+
+        // Se a lista estiver vazia (ex: F5 na página), vamos buscá-la primeiro!
+        if (users.length === 0) fetchUsers(token);
+
         fetchUserDetails(token, username);
         return () => clearUserDetails();
-    }, [token, username, fetchUserDetails, clearUserDetails, navigate]);
+    }, [token, username, fetchUserDetails, clearUserDetails, fetchUsers, navigate, users.length]);
 
     const defaultAvatar = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
@@ -50,43 +63,69 @@ export default function AdminUserDetails() {
         ? userLeads
         : userLeads.filter(lead => String(lead.estado) === String(filtro));
 
-    const handleEdit = (item, type) => {
-        setItemEmEdicao({ ...item });
-        setItemOriginal({ ...item }); // <-- GUARDA A CÓPIA INTACTA AQUI!
-        setTipoEdicao(type);
-        setModalAberto(true);
-    };
-
-    // Função a colocar no AdminUserDetails.jsx e passar como onSave={handleSalvarEdicao}
-    const handleSalvarEdicao = async (itemEditado) => {
-        let sucesso = false;
-        if (tipoEdicao === 'client') {
-            sucesso = await editClientAdmin(token, username, itemEditado.id, itemEditado);
-        } else {
-            sucesso = await editLeadAdmin(token, username, itemEditado.id, itemEditado);
-        }
-
-        if (sucesso) {
-            setModalAberto(false);
-        } else {
-            alert("Ocorreu um erro ao guardar as alterações.");
-        }
-    };
-
     const handleToggleActive = async (item, type) => {
         const acao = item.ativo ? 'inativar' : 'reativar';
         if (window.confirm(`Tem a certeza que deseja ${acao} este registo?`)) {
-            if (type === 'client') await toggleClientStatus(token, username, item.id, item.ativo);
-            else await toggleLeadStatus(token, username, item.id, item.ativo);
+            // Removido o IF para funcionar com clientes E leads!
+            await toggleItemStatus(token, username, type, item.id, item.ativo);
+        }
+    };
+
+    const handleDeleteUserPermanent = async () => {
+        if (window.confirm(`ATENÇÃO: Vai apagar o utilizador @${username} e TODOS os seus clientes e leads permanentemente. Esta ação não pode ser desfeita. Continuar?`)) {
+            const sucesso = await deleteUser(token, username, true); // True = Apaga tudo da BD (Hard Delete)
+            if (sucesso) {
+                alert("Utilizador apagado permanentemente!");
+                navigate('/admin'); // Como a conta já não existe, voltamos à lista geral
+            } else {
+                alert("Ocorreu um erro ao apagar o utilizador.");
+            }
         }
     };
 
     const handleDelete = async (item, type) => {
         if (window.confirm(`ATENÇÃO: Vai apagar permanentemente este registo e perder os dados. Continuar?`)) {
-            if (type === 'client') await deleteClientPermanent(token, username, item.id);
-            else await deleteLeadPermanent(token, username, item.id);
+            // Removido o IF para funcionar com clientes E leads!
+            await deleteItemPermanent(token, username, type, item.id);
         }
     };
+
+    const handleToggleUserStatus = async () => {
+        const acao = selectedUser.ativo ? 'inativar' : 'reativar';
+        if (window.confirm(`Tem a certeza que deseja ${acao} a conta do utilizador @${username}?`)) {
+            let sucesso;
+            if (selectedUser.ativo) {
+                sucesso = await deleteUser(token, username, false); // False = Apenas Inativa (Soft Delete)
+            } else {
+                sucesso = await reactivateUser(token, username);
+            }
+
+            if (sucesso) {
+                alert(`Conta ${acao}da com sucesso!`);
+            } else {
+                alert(`Ocorreu um erro ao tentar ${acao} a conta.`);
+            }
+        }
+    };
+
+    const handleToggleAll = async (type, inativar) => {
+        const acao = inativar ? 'inativar' : 'reativar';
+        const nomeTipo = type === 'client' ? 'todos os clientes' : 'todas as leads';
+
+        if (window.confirm(`Tem a certeza que deseja ${acao} ${nomeTipo} do utilizador @${username}?`)) {
+            // Removido o IF para funcionar com clientes E leads!
+            await toggleAllItemsStatus(token, username, type, inativar);
+        }
+    };
+
+    const handleDeleteAll = async (type) => {
+        const nomeTipo = type === 'client' ? 'TODOS os clientes' : 'TODAS as leads';
+        if (window.confirm(`ATENÇÃO EXPLOSIVA 💣: Vai apagar permanentemente ${nomeTipo} do utilizador @${username}. Esta ação NÃO pode ser desfeita. Continuar?`)) {
+            // Removido o IF para funcionar com clientes E leads!
+            await deleteAllItemsPermanent(token, username, type);
+        }
+    };
+
 
     return (
         <div className="main-content">
@@ -115,8 +154,20 @@ export default function AdminUserDetails() {
                         </div>
                     </div>
                     <div className="profile-detail-actions">
-                        <button className="btn-action-inativar"><i className="fa-solid fa-user-slash"></i> Inativar Conta</button>
-                        <button className="btn-action-excluir"><i className="fa-solid fa-trash"></i> Excluir Conta</button>
+                        <button
+                            className="btn-action-inativar"
+                            onClick={handleToggleUserStatus}
+                        >
+                            <i className={`fa-solid ${selectedUser.ativo ? 'fa-user-slash' : 'fa-user-check'}`}></i>
+                            {selectedUser.ativo ? ' Inativar Conta' : ' Reativar Conta'}
+                        </button>
+                        <button
+                            className="btn-action-excluir"
+                            onClick={handleDeleteUserPermanent}
+                        >
+                            <i className="fa-solid fa-trash"></i> Excluir Conta
+                        </button>
+
                     </div>
                 </div>
 
@@ -132,9 +183,12 @@ export default function AdminUserDetails() {
                             type="client"
                             data={userClients}
                             cardClass="clients-card"
-                            onEdit={(item) => handleEdit(item, 'client')}
+                            onEdit={(item) => clientModal.abrirParaEditar(null, item)}
                             onToggleActive={(item) => handleToggleActive(item, 'client')}
                             onDelete={(item) => handleDelete(item, 'client')}
+                            onReactivateAll={() => handleToggleAll('client', false)}
+                            onInactivateAll={() => handleToggleAll('client', true)}
+                            onDeleteAll={() => handleDeleteAll('client')}
                         />
 
                         {/* 2. Componente a agir como Lista de Leads */}
@@ -144,9 +198,12 @@ export default function AdminUserDetails() {
                             data={leadsFiltradas}
                             cardClass="leads-card"
                             filterElement={filtroLeads}
-                            onEdit={(item) => handleEdit(item, 'lead')}
+                            onEdit={(item) => leadModal.abrirParaEditar(null, item)}
                             onToggleActive={(item) => handleToggleActive(item, 'lead')}
                             onDelete={(item) => handleDelete(item, 'lead')}
+                            onReactivateAll={() => handleToggleAll('lead', false)}
+                            onInactivateAll={() => handleToggleAll('lead', true)}
+                            onDeleteAll={() => handleDeleteAll('lead')}
                         />
 
                     </div>
@@ -154,12 +211,21 @@ export default function AdminUserDetails() {
             </div>
 
             <FormModal
-                isOpen={modalAberto}
-                type={tipoEdicao}
-                initialData={itemEmEdicao}
-                onClose={() => setModalAberto(false)}
-                onSave={handleSalvarEdicao}
+                isOpen={clientModal.modalAberto}
+                type="client"
+                initialData={clientModal.itemEmEdicao}
+                onClose={clientModal.fecharModal}
+                onSave={clientModal.handleSalvar}
             />
+
+            <FormModal
+                isOpen={leadModal.modalAberto}
+                type="lead"
+                initialData={leadModal.itemEmEdicao}
+                onClose={leadModal.fecharModal}
+                onSave={leadModal.handleSalvar}
+            />
+
         </div>
     );
 }

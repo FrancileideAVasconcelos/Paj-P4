@@ -14,7 +14,7 @@ export default function LeadDetails() {
     const token = tokenStore((state) => state.token);
     const { currentLead, fetchLeadById, updateLead, softDeleteLead, loading } = useLeadStore();
 
-    const modalProps = useFormModal(updateLead, token);
+    const modalProps = useFormModal(async () => {}, updateLead, token);
 
     useEffect(() => {
         if (token && id) fetchLeadById(token, id);
@@ -38,7 +38,7 @@ export default function LeadDetails() {
         <div className="admin-container">
             <div className="barra-container">
                 <h2>Detalhes da Lead</h2>
-                <button className="btn-toggle" onClick={() => navigate('/leads')} style={{ backgroundColor: '#95a5a6', color: 'white', border: 'none', padding: '8px 15px', borderRadius: '4px', cursor: 'pointer' }}>
+                <button className="btn-toggle" onClick={() => navigate('/leads')}>
                     <i className="fa-solid fa-arrow-left"></i> Voltar à Lista
                 </button>
             </div>
@@ -69,8 +69,7 @@ export default function LeadDetails() {
                         <p className="static-data">{new Date(currentLead.dataCriacao).toLocaleDateString('pt-PT')}</p>
                     </div>
 
-                    <div className="form-actions" style={{ marginTop: '30px', borderTop: '1px solid #eee', paddingTop: '20px' }}>
-                        {/* 1. O BOTÃO DE EDITAR AGORA ABRE O MODAL */}
+                    <div className="form-actions">
                         <button onClick={(e) => modalProps.abrirParaEditar(e, currentLead)} className="btn-save">
                             <i className="fa-solid fa-pen"></i> Editar Detalhes
                         </button>

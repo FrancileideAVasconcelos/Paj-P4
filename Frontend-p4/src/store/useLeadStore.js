@@ -1,7 +1,6 @@
 import { create } from 'zustand';
-import {api} from "../services/api.js";
+import { LeadService } from "../services/api.js";
 
-// useLeadStore.js
 const useLeadStore = create((set, get) => ({
     leads: [],
     currentLead: null, // Armazena a lead selecionada
@@ -10,10 +9,7 @@ const useLeadStore = create((set, get) => ({
     fetchLeads: async (token, estado = "") => {
         set({ loading: true });
         try {
-            // A 'api' já faz o fetch e o processamento
-            // Nota: Corrigi o '=' que faltava no teu código original
-            const data = await api.get(`/leads?estado=${estado}`);
-
+            const data = await LeadService.getAll(estado)
             // 'data' já são as leads, não precisas de .ok nem .json()!
             set({ leads: Array.isArray(data) ? data : [], loading: false });
         } catch (error) {
@@ -25,7 +21,7 @@ const useLeadStore = create((set, get) => ({
     fetchLeadById: async (token, id) => {
         set({ loading: true });
         try {
-            const data = await api.get(`/leads/${id}`); // Rota do teu backend
+            const data = await LeadService.getById(id)
             set({ currentLead: data, loading: false });
         } catch (error) {
             console.error("Erro ao carregar detalhes:", error);
@@ -36,9 +32,7 @@ const useLeadStore = create((set, get) => ({
     addLead: async (token, novaLead) => {
         set({ loading: true });
         try {
-            // Se o Java devolver "Lead adicionada...", o 'api.post' lida com isso
-            await api.post('/leads', novaLead);
-
+            await LeadService.create(novaLead)
             // Recarrega a lista para mostrar a nova lead
             await get().fetchLeads(token);
             set({ loading: false });
@@ -54,11 +48,13 @@ const useLeadStore = create((set, get) => ({
     updateLead: async (token, id, leadAtualizada) => {
         set({ loading: true });
         try {
-            // Agora o api.patch já deve funcionar!
-            await api.patch(`/leads/${id}`, leadAtualizada);
+            await LeadService.update(id, leadAtualizada)
 
-            await get().fetchLeadById(token, id); // Recarrega os detalhes
-            await get().fetchLeads(token);       // Recarrega a lista global
+            set((state) => ({
+                leads: state.leads.map(l => l.id === id ? { ...l, ...leadAtualizada } : l),
+                currentLead: state.currentLead?.id === id ? { ...state.currentLead, ...leadAtualizada } : state.currentLead,
+                loading: false
+            }));
 
             set({ loading: false });
             return true;
@@ -72,12 +68,14 @@ const useLeadStore = create((set, get) => ({
     softDeleteLead: async (token, id) => {
         set({ loading: true });
         try {
-            // Chama o endpoint DELETE /leads/{id} do teu LeadService.java
-            await api.delete(`/leads/${id}`);
+            await LeadService.delete(id)
 
-            // Atualiza a lista localmente chamando o fetchLeads
-            await get().fetchLeads(token);
-            set({ loading: false });
+            set((state) => ({
+                leads: state.leads.map(l => l.id === id ? { ...l, ativo: false } : l),
+                currentLead: state.currentLead?.id === id ? { ...state.currentLead, ativo: false } : state.currentLead,
+                loading: false
+            }));
+
             return true;
         } catch (error) {
             console.error("Erro ao eliminar lead:", error);

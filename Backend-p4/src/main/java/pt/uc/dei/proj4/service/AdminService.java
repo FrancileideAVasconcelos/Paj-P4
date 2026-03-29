@@ -129,7 +129,7 @@ public class AdminService extends BaseService {
     @Path("/clients/{id}")
     public Response editarClienteAdmin(@HeaderParam("token") String token,
                                        @PathParam("id") Long idCliente,
-                                       @Valid ClientDto dto) {
+                                       @Valid ClientDto dto) throws Exception {
 
         validarAdmin(token);
 

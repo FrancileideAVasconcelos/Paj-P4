@@ -12,7 +12,7 @@ export default function ClientDetails() {
     const token = tokenStore((state) => state.token);
     const { currentClient, fetchClientById, softDeleteClient, updateClient, loading } = useClientStore();
 
-    const modalProps = useFormModal( updateClient, token);
+    const modalProps = useFormModal(async () => {}, updateClient, token);
 
     useEffect(() => {
         if (token && id) fetchClientById(token, id);

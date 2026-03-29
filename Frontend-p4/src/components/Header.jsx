@@ -1,7 +1,7 @@
 import {useEffect} from "react";
 import '../styles/AsideFooterHeader.css'
 import tokenStore from "../store/tokenStore.js";
-import useUserStore from '../store/UserStore.js';
+import useUserStore from '../store/useUserStore.js';
 import {useNavigate} from "react-router-dom";
 
 export default function Header({ toggleMenu }) {

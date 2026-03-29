@@ -1,16 +1,13 @@
 import { create } from 'zustand';
-import {api} from "../services/api.js";
+import {UserService} from "../services/api.js";
 
 
 const useUserStore = create((set,get ) => ({
     currentUser: null, // Aqui vamos guardar o UserDto
 
-    fetchCurrentUser: async (token) => {
+    fetchCurrentUser: async () => {
         try {
-            const response = await api.get('/users/profile', {
-                headers: { token: token }
-            });
-
+            const response = await UserService.getprofile();
             set({ currentUser: response });
 
         } catch (error) {
@@ -19,14 +16,9 @@ const useUserStore = create((set,get ) => ({
         }
     },
 
-    checkCurrentPassword: async (token, passAtual) => {
+    checkCurrentPassword: async (passAtual) => {
         try {
-            await api.get('/users/checkPass', {
-                headers: {
-                    token: token,
-                    passatual: passAtual // 1. TUDO EM MINÚSCULAS AQUI TAMBÉM!
-                }
-            });
+            await UserService.checkPassword(passAtual);
             return { sucesso: true };
         } catch (error) {
             // Agora o erro que chega aqui será o nosso 403 e a mensagem é capturada!
@@ -37,10 +29,8 @@ const useUserStore = create((set,get ) => ({
     updateUserProfile: async (token, novosDados) => {
         set({ loading: true });
         try {
-            await api.patch('/users/perfil', novosDados, { headers: { token } });
-
+            await UserService.updateProfile(novosDados);
             await get().fetchCurrentUser(token);
-
             set({ loading: false });
             return { sucesso: true };
         } catch (error) {

@@ -85,6 +85,12 @@ public class ClienteDao extends DefaultDao<ClienteEntity> implements Serializabl
 
     // ======== ADMIN ===========//
 
+    public List<ClienteEntity> findAllByUserForAdmin(UserEntity user) {
+        return em.createQuery("SELECT c FROM ClienteEntity c WHERE c.users = :user", ClienteEntity.class)
+                .setParameter("user", user)
+                .getResultList();
+    }
+
     public void reativarTodosOsClients(UserEntity user) {
         em.createQuery("UPDATE ClienteEntity c SET c.isAtivo = true WHERE c.users = :user")
                 .setParameter("user", user)

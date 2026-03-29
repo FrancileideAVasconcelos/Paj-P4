@@ -3,7 +3,9 @@ import React from 'react';
 
 export default function ListClientLeadAdmin({
                                                 title, type, data, cardClass, filterElement,
-                                                onEdit, onToggleActive, onDelete}) {
+                                                onEdit, onToggleActive, onDelete,
+                                                onReactivateAll, onInactivateAll, onDeleteAll}) {
+
     // Dicionário de estados (agora vive aqui dentro, isolado!)
     const nomesDosEstados = {
         0: "Novo", 1: "Em análise", 2: "Proposta", 3: "Ganho", 4: "Perdido"
@@ -19,9 +21,9 @@ export default function ListClientLeadAdmin({
                 </div>
 
                 <div className="data-card-actions">
-                    <button className="icon-btn green-btn" title="Reativar Todos"><i className="fa-solid fa-folder-open"></i></button>
-                    <button className="icon-btn orange-btn" title="Inativar Todos"><i className="fa-solid fa-ban"></i></button>
-                    <button className="icon-btn red-btn" title="Excluir Definitivamente Todos"><i className="fa-solid fa-fire"></i></button>
+                    <button className="icon-btn green-btn" title="Reativar Todos" onClick={onReactivateAll} ><i className="fa-solid fa-folder-open"></i></button>
+                    <button className="icon-btn orange-btn" title="Inativar Todos" onClick={onInactivateAll}><i className="fa-solid fa-ban"></i></button>
+                    <button className="icon-btn red-btn" title="Excluir Definitivamente Todos" onClick={onDeleteAll}><i className="fa-solid fa-fire"></i></button>
                 </div>
             </div>
             <div className="data-card-content">

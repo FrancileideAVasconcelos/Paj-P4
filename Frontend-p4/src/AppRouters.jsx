@@ -9,9 +9,15 @@ import Admin from "./pages/Admin.jsx";
 import AdminUserDetails from "./components/AdminUserDetails.jsx";
 import LeadDetails from "./components/LeadDetails.jsx";
 import ClientDetails from "./components/ClientDetails.jsx";
+import useUserStore from "./store/useUserStore.js";
 
 
 export default function AppRoutes({ token }) {
+
+    const currentUser = useUserStore((state) => state.currentUser);
+
+    const isAdmin = currentUser?.admin === true;
+
     return (
         <Routes>
             {/* Rotas de Autenticação */}
@@ -29,20 +35,20 @@ export default function AppRoutes({ token }) {
             <Route path="/client" element={token ? <Client /> : <Navigate to="/login" />} />
             <Route path="/clients/:id" element={token ? <ClientDetails /> : <Navigate to="/login" />} />
 
-            <Route path="/admin" element={token ? <Admin /> : <Navigate to="/login" />} />
+            <Route
+                path="/admin"
+                element={token && isAdmin ? <Admin /> : <Navigate to="/dashboard" />}
+            />
 
-            <Route path="/admin/user/:username" element={token ? <AdminUserDetails /> : <Navigate to="/login" />} />
-
+            <Route
+                path="/admin/user/:username"
+                element={token && isAdmin ? <AdminUserDetails /> : <Navigate to="/dashboard" />}
+            />
 
             {/* Redirecionamento Inicial */}
             <Route path="/" element={<Navigate to={token ? "/dashboard" : "/login"} />} />
 
-
-
-
-
-            {/* 3. Lógica inteligente para o 404:
-               Se não houver token, manda para o login. Se houver, mostra o erro. */}
+            {/* Lógica inteligente para o 404 */}
             <Route path="*" element={!token ? <Navigate to="/login" /> : <h2>404 - Página não encontrada</h2>} />
         </Routes>
     );

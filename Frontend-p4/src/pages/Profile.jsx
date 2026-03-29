@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useUserStore from '../store/UserStore.js';
+import useUserStore from '../store/useUserStore.js';
 import tokenStore from '../store/tokenStore.js';
 
 export default function Profile() {
@@ -176,7 +176,7 @@ export default function Profile() {
                     </div>
 
                     <div className="form-actions" style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px' }}>
-                        <button type="submit" className="btn-submit" disabled={loading} style={{ padding: '10px 20px', cursor: 'pointer' }}>
+                        <button type="submit" className="btn-save" disabled={loading}>
                             {loading ? 'A Guardar...' : 'Guardar Perfil'}
                         </button>
                     </div>

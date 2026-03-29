@@ -1,13 +1,12 @@
 import { create } from 'zustand';
-import { api } from "../services/api.js";
+import { AdminService } from "../services/api.js";
 
 const useAdminStore = create((set, get) => ({
-    // 1. ESTADO GLOBAL DE ADMIN
+
     users: [],
     loading: false,
     error: null,
 
-    // 2. ESTADO ESPECÍFICO DOS DETALHES DO UTILIZADOR (A correção está aqui!)
     userClients: [],
     userLeads: [],
     loadingDetails: false,
@@ -16,7 +15,7 @@ const useAdminStore = create((set, get) => ({
     fetchUsers: async (token) => {
         set({ loading: true, error: null });
         try {
-            const response = await api.get('/admin/users');
+            const response = await AdminService.getAllUsers();
             set({ users: response, loading: false });
         } catch (error) {
             set({ error: error.message || "Erro ao carregar utilizadores", loading: false });
@@ -25,8 +24,14 @@ const useAdminStore = create((set, get) => ({
 
     deleteUser: async (token, username, permanente = false) => {
         try {
-            await api.delete(`/admin/users/${username}?permanente=${permanente}`);
-            get().fetchUsers(token);
+            await AdminService.deleteUser(username, permanente);
+
+            set((state) => ({
+                users: permanente
+                    ? state.users.filter(u => u.username !== username)
+                    : state.users.map(u => u.username === username ? { ...u, ativo: false } : u)
+            }));
+
             return true;
         } catch (error) {
             return false;
@@ -35,8 +40,12 @@ const useAdminStore = create((set, get) => ({
 
     reactivateUser: async (token, username) => {
         try {
-            await api.patch(`/admin/users/${username}/reactivate`, {});
-            get().fetchUsers(token);
+            await AdminService.reactivateUser(username);
+
+            set((state) => ({
+                users: state.users.map(u => u.username === username ? { ...u, ativo: true } : u)
+            }));
+
             return true;
         } catch (error) {
             return false;
@@ -48,11 +57,9 @@ const useAdminStore = create((set, get) => ({
         set({ loadingDetails: true, error: null });
         try {
             const [clientsResponse, leadsResponse] = await Promise.all([
-                api.get(`/admin/users/${username}/clients`),
-                api.get(`/admin/users/${username}/leads`)
+                AdminService.getUserClients(username),
+                AdminService.getUserLeads(username)
             ]);
-
-            // Garante que mesmo que o Java falhe, guarda sempre um array vazio []
             set({
                 userClients: Array.isArray(clientsResponse) ? clientsResponse : [],
                 userLeads: Array.isArray(leadsResponse) ? leadsResponse : [],
@@ -72,25 +79,16 @@ const useAdminStore = create((set, get) => ({
     clearUserDetails: () => set({ userClients: [], userLeads: [], error: null }),
 
     // --- NOVAS FUNÇÕES PARA CLIENTES ---
-    toggleClientStatus: async (token, username, id, isAtivo) => {
-        try {
-            if (isAtivo) {
-                // Chama: DELETE /admin/clients/{id}?permanente=false
-                await api.delete(`/admin/clients/${id}?permanente=false`);
-            } else {
-                // Chama: PATCH /admin/clients/{id}/reactivate
-                await api.patch(`/admin/clients/${id}/reactivate`, {});
-            }
-            await get().fetchUserDetails(token, username);
-        } catch (error) {
-            console.error("Erro ao alterar estado do cliente:", error);
-        }
-    },
+
 
     editClientAdmin: async (token, username, id, clientData) => {
         try {
-            await api.patch(`/admin/clients/${id}`, clientData);
-            await get().fetchUserDetails(token, username); // Recarrega a lista
+            await AdminService.editClient(id,clientData)
+
+            set((state) => ({
+                userClients: state.userClients.map(c => c.id === id ? { ...c, ...clientData } : c)
+            }));
+
             return true;
         } catch (error) {
             console.error("Erro ao editar cliente:", error);
@@ -98,52 +96,97 @@ const useAdminStore = create((set, get) => ({
         }
     },
 
-    deleteClientPermanent: async (token, username, id) => {
-        try {
-            // Chama: DELETE /admin/clients/{id}?permanente=true
-            await api.delete(`/admin/clients/${id}?permanente=true`);
-            await get().fetchUserDetails(token, username);
-        } catch (error) {
-            console.error("Erro ao apagar cliente:", error);
-        }
-    },
-
-    // --- NOVAS FUNÇÕES PARA LEADS ---
-    toggleLeadStatus: async (token, username, id, isAtivo) => {
-        try {
-            if (isAtivo) {
-                // Chama: DELETE /admin/leads/{id}?permanente=false
-                await api.delete(`/admin/leads/${id}?permanente=false`);
-            } else {
-                // Chama: PATCH /admin/leads/{id}/reactivate
-                await api.patch(`/admin/leads/${id}/reactivate`, {});
-            }
-            await get().fetchUserDetails(token, username);
-        } catch (error) {
-            console.error("Erro ao alterar estado da lead:", error);
-        }
-    },
-
     editLeadAdmin: async (token, username, id, leadData) => {
         try {
-            await api.patch(`/admin/leads/${id}`, leadData);
-            await get().fetchUserDetails(token, username); // Recarrega a lista
+            await AdminService.editLead(id, leadData)
+
+            set((state) => ({
+                userLeads: state.userLeads.map(l => l.id === id ? { ...l, ...leadData } : l)
+            }));
+
             return true;
         } catch (error) {
             console.error("Erro ao editar lead:", error);
             return false;
         }
     },
+    // ==========================================
+    // FUNÇÕES UNIFICADAS (CLIENTES & LEADS)
+    // ==========================================
 
-    deleteLeadPermanent: async (token, username, id) => {
+    toggleItemStatus: async (token, username, type, id, isAtivo) => {
+
         try {
-            // Chama: DELETE /admin/leads/{id}?permanente=true
-            await api.delete(`/admin/leads/${id}?permanente=true`);
-            await get().fetchUserDetails(token, username);
+            if (isAtivo) {
+                await AdminService.toggleItemStatus(type,id, isAtivo)
+            } else {
+                await AdminService.toggleItemStatus(type, id, isAtivo)
+            }
+
+            set((state) => {
+                const listName = type === 'client' ? 'userClients' : 'userLeads';
+                return {
+                    [listName]: state[listName].map(item => item.id === id ? { ...item, ativo: !isAtivo } : item)
+                };
+            });
+
         } catch (error) {
-            console.error("Erro ao apagar lead:", error);
+            console.error(`Erro ao alterar estado de ${type}:`, error);
+        }
+    },
+
+    deleteItemPermanent: async (token, username, type, id) => {
+        try {
+            await AdminService.deleteItemPermanent(type,id)
+
+            set((state) => {
+                const listName = type === 'client' ? 'userClients' : 'userLeads';
+                return {
+                    [listName]: state[listName].filter(item => item.id !== id)
+                };
+            });
+
+        } catch (error) {
+            console.error(`Erro ao apagar ${type}:`, error);
+        }
+    },
+
+    toggleAllItemsStatus: async (token, username, type, inativar) => {
+        try {
+            if (inativar) {
+                await AdminService.toggleAllItemsStatus(username, type, inativar)
+            } else {
+                await AdminService.toggleAllItemsStatus(username, type, inativar)
+            }
+
+            set((state) => {
+                const listName = type === 'client' ? 'userClients' : 'userLeads';
+                return {
+                    [listName]: state[listName].map(item => ({ ...item, ativo: !inativar }))
+                };
+            });
+
+        } catch (error) {
+            console.error(`Erro ao alterar estado de todos os ${type}s:`, error);
+        }
+    },
+
+    deleteAllItemsPermanent: async (token, username, type) => {
+        try {
+            await AdminService.deleteAllItemsPermanent(username, type)
+
+            set((state) => {
+                const listName = type === 'client' ? 'userClients' : 'userLeads';
+                return {
+                    [listName]: []
+                };
+            });
+
+        } catch (error) {
+            console.error(`Erro ao apagar todos os ${type}s:`, error);
         }
     }
+
 }));
 
 export default useAdminStore;

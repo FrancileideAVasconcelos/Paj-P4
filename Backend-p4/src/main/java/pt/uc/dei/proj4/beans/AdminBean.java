@@ -93,14 +93,23 @@ public class AdminBean implements Serializable {
         UserEntity alvo = userDao.checkUsername(usernameAlvo);
         if (alvo == null) throw new NotFoundException("Utilizador alvo não encontrado.");
 
-        return clientBean.listClients(alvo);
+        List<ClienteEntity> clients = clienteDao.findAllByUserForAdmin(alvo);
+        List<ClientDto> dtos = new ArrayList<>();
+        for (ClienteEntity c : clients) {
+            dtos.add(clientBean.converForDto(c));
+        }
+        return dtos;
     }
 
     //Editar Clientes de outros utilizadores
-    public void editarClienteAdmin(Long idCliente, ClientDto dtoNovo) {
+    public void editarClienteAdmin(Long idCliente, ClientDto dtoNovo) throws Exception {
 
         ClienteEntity clientAtual = clienteDao.findClienteById(idCliente);
         if (clientAtual == null) throw new NotFoundException("Cliente não encontrada.");
+
+        if (clienteDao.existsByNomeAndEmpresaForEdit(idCliente, dtoNovo.getNome(), dtoNovo.getEmpresa())) {
+            throw new Exception("Este cliente já está registado nesta empresa.");
+        }
 
         clienteDao.atualizaCliente(clientAtual, dtoNovo);
     }
