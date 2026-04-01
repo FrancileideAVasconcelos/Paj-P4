@@ -35,13 +35,15 @@ export default function AppRoutes({ token }) {
             <Route path="/client" element={token ? <Client /> : <Navigate to="/login" />} />
             <Route path="/clients/:id" element={token ? <ClientDetails /> : <Navigate to="/login" />} />
 
-            <Route
-                path="/admin"
-                element={token && isAdmin ? <Admin /> : <Navigate to="/dashboard" />}
+            <Route path="/admin"
+                   element={
+                       token && isAdmin
+                           ? <Admin />
+                           : <Navigate to="/dashboard" state={{ erro: 'Só o administrador pode acessar essa página.' }} replace />
+                   }
             />
 
-            <Route
-                path="/admin/user/:username"
+            <Route path="/admin/user/:username"
                 element={token && isAdmin ? <AdminUserDetails /> : <Navigate to="/dashboard" />}
             />
 

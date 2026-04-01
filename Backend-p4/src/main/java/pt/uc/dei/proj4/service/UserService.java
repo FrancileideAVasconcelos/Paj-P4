@@ -79,7 +79,7 @@ public class UserService extends BaseService {
     @PATCH
     @Path("/perfil")
     public Response updateProfile(@HeaderParam("token") String token,
-                                   @Valid UserDto dadosNovos) throws Exception{
+                                   @Valid UserDto dadosNovos) {
 
         UserEntity user = validarAcesso(token);
 
