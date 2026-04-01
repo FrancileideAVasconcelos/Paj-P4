@@ -1,5 +1,12 @@
-.dashboard-container { padding: 20px; }
-.dashboard-title { margin-bottom: 25px; color: #333; }
+/* Dashboard.css */
+.dashboard-container {
+    padding: 20px;
+}
+
+.dashboard-title {
+    margin-bottom: 25px;
+    color: var(--text-main);
+}
 
 /* Grelha de Cartões */
 .stats-grid {
@@ -10,47 +17,33 @@
 }
 
 .stat-card {
-    background: white;
+    background: var(--bg-card);
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.stat-card h3 { font-size: 16px; color: #666; margin-bottom: 10px; }
-.stat-number { font-size: 32px; font-weight: bold; color: #004680; }
-/* Dashboard.css - Mantendo o teu original e adicionando a interação */
-
-.dashboard-container { padding: 20px; }
-.dashboard-title { margin-bottom: 25px; color: #333; }
-
-/* Grelha de Cartões */
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    margin-bottom: 40px;
-}
-
-.stat-card {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    text-align: center;
-    transition: transform 0.2s, box-shadow 0.2s; /* Adicionado para suavidade */
-}
-
-/* Regra de Uniformização para cartões clicáveis */
+/* Interação para cartões clicáveis */
 .stat-card.clickable {
     cursor: pointer;
 }
 
 .stat-card.clickable:hover {
-    transform: translateY(-3px); /* Mesmo movimento da lista de leads */
-    box-shadow: 0 8px 15px rgba(0,0,0,0.1); /* Sombra mais profunda no hover */
-    border: 1px solid var(--primary-color); /* Realce subtil com a tua cor principal */
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    border: 1px solid var(--primary-color);
 }
 
-.stat-card h3 { font-size: 16px; color: #666; margin-bottom: 10px; }
-.stat-number { font-size: 32px; font-weight: bold; color: #004680; }
+.stat-card h3 {
+    font-size: 16px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.stat-number {
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--primary-dark);
+}

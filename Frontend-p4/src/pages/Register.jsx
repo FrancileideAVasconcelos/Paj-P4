@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { api } from '../services/api';
-import { Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import '../styles/loginRegister.css';
 
 export default function Register(){
+
+    const navigate = useNavigate();
 
     const [primeiroNome, setPrimeiroNome] = useState('');
     const [ultimoNome , setUltimoNome] = useState('');
@@ -33,18 +35,20 @@ export default function Register(){
 
         try {
             // Ajusta o URL se o teu endpoint de login for diferente!
-            const data = await api.post('/users/register', novoUtilizador);
+            await api.post('/users/register', novoUtilizador);
             alert("Sucesso!");
+
+            navigate('/login');
         } catch (err) {
             setErro(err.message);
         }
     }
     return (
-        <div className="login-page-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px' }}>
-            <div className="login-container" style={{ maxWidth: '500px' }}>
+        <div className="login-page-container">
+            <div className="login-container">
                 <h2>Registar Conta</h2>
 
-                {erro && <p style={{ color: 'red', textAlign: 'center' }}>{erro}</p>}
+                {erro && <p style={{ color: '#e74c3c', textAlign: 'center', marginBottom: '10px', fontWeight: 'bold' }}>{erro}</p>}
 
                 <form onSubmit={handleRegister} className="custom-form">
                     <div className="form-row">
@@ -84,8 +88,8 @@ export default function Register(){
                     </div>
 
                     <div className="form-actions">
-                        <button type="submit" className="btn">Registar</button>
-                        <Link to="/login" className="btn">
+                        <button type="submit" className="btn-auth">Registar</button>
+                        <Link to="/login" className="btn-auth btn-secondary">
                             Voltar
                         </Link>
                     </div>
@@ -93,5 +97,4 @@ export default function Register(){
             </div>
         </div>
     );
-
 }

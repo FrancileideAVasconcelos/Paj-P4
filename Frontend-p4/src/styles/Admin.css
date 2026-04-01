@@ -1,168 +1,62 @@
 /* src/styles/admin.css */
 
-.admin-container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
 .admin-title {
-    margin-bottom: 5px;
-    color: #333;
+    margin-bottom: 25px;
+    color: var(--text-main);
     font-size: 24px;
+    border-bottom: 2px solid #f0f2f5;
+    padding-bottom: 10px;
 }
 
-.admin-subtitle {
-    margin-bottom: 20px;
-    color: #666;
-    font-size: 14px;
-}
-
-/* LISTA DE UTILIZADORES */
+/* LISTA GERAL DE UTILIZADORES (Admin.jsx) */
 .users-list {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-/* CARTÃO DO UTILIZADOR */
+/* O cartão do utilizador usa a mesma mecânica do 'data-item' */
 .user-card {
+    background: white;
+    padding: 15px 25px;
+    border-radius: 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+    border: 1px solid transparent;
 }
 
-.card-active {
-    background-color: #ffffff;
-}
-
-/* Dá um aspeto ligeiramente "apagado" aos inativos */
-.card-inactive {
-    background-color: #f9f9f9;
-    opacity: 0.85;
-}
-
-/* O tal efeito de hover para interatividade */
 .user-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+    border: 1px solid var(--primary-color);
 }
 
-/* ESQUERDA: FOTO E DETALHES */
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+.card-inactive {
+    background-color: #f8f9fa;
+    opacity: 0.75;
 }
 
-.user-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #eee;
+.card-inactive:hover {
+    opacity: 1;
+    border-color: #ccc;
 }
 
-.user-details h3 {
-    margin: 0;
-    color: #2c3e50;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-}
+.user-info { display: flex; align-items: center; gap: 15px; }
+.user-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #eee; }
+.user-details h3 { margin: 0; color: #2c3e50; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+.user-details p { margin: 4px 0 0 0; color: #7f8c8d; font-size: 13px; }
+.admin-badge { background-color: var(--primary-color); color: white; padding: 4px 8px; border-radius: 12px; font-size: 11px; }
 
-.user-details p {
-    margin: 4px 0 0 0;
-    color: #7f8c8d;
-    font-size: 13px;
-}
-
-.admin-badge {
-    margin-left: 8px;
-    color: #2980b9;
-    font-size: 12px;
-    font-weight: 500;
-}
-
-/* DIREITA: BOTÕES E ESTADO */
-.user-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* ETIQUETAS DE ESTADO */
-.status-badge {
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 700;
-}
-
-.badge-active {
-    background-color: #e8f5e9;
-    color: #2e7d32;
-}
-
-.badge-inactive {
-    background-color: #ffebee;
-    color: #c62828;
-}
-
-/* BOTÕES DE AÇÃO */
-.btn-inativar, .btn-reativar, .btn-apagar {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 4px;
-    color: white;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: bold;
-    transition: filter 0.2s ease;
-}
-
-/* Um hover simples para os botões usando filtro de brilho */
-.btn-inativar:hover, .btn-reativar:hover, .btn-apagar:hover {
-    filter: brightness(0.9);
-}
-
-.btn-inativar {
-    background-color: #f39c12; /* Laranja */
-}
-
-.btn-reativar {
-    background-color: #27ae60; /* Verde */
-}
-
-.btn-apagar {
-    background-color: #e74c3c; /* Vermelho */
-}
-
-/* UTILITÁRIOS E TEXTOS DE ESTADO */
-.empty-list-text, .loading-text {
-    text-align: center;
-    color: #999;
-    padding: 20px;
-    font-style: italic;
-}
-
-.alert-error {
-    background-color: #fde8e8;
-    color: #c0392b;
-    padding: 12px;
-    border-radius: 6px;
-    border: 1px solid #fadbd8;
-    margin-bottom: 20px;
-}
+.status-badge { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+.badge-active { background-color: #dcfce7; color: #15803d; }
+.badge-inactive { background-color: #fee2e2; color: #b91c1c; }
 
 /* =========================================
-   ESTILOS DOS DETALHES DO UTILIZADOR
+   DETALHES DO UTILIZADOR (AdminUserDetails.jsx)
    ========================================= */
 
 .details-header {
@@ -172,103 +66,41 @@
     margin-bottom: 25px;
 }
 
-.details-header h2 {
-    font-size: 24px;
-    color: #000;
-    margin: 0;
-}
+.details-header h2 { font-size: 24px; color: var(--text-main); margin: 0; }
 
-.btn-voltar {
-    background-color: var(--primary-dark);
-    color: white;
-    border: none;
-    border-radius: 20px;
-    padding: 10px 20px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.btn-voltar:hover {
-    background-color: var(--accent-color);
-}
-
-/* CARTÃO DE PERFIL (Topo) */
+/* Cartão do Perfil do Utilizador */
 .profile-detail-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--bg-card);
+    background-color: white;
     padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    border-left: 6px solid var(--primary-dark); /* A barra azul lateral */
-    margin-bottom: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border-left: 6px solid var(--primary-color);
+    margin-bottom: 30px;
 }
 
-.profile-detail-left {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
+.profile-detail-left { display: flex; align-items: center; gap: 20px; }
+.profile-detail-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+.profile-detail-info h3 { margin: 0 0 10px 0; font-size: 20px; color: #333; }
+.profile-detail-contacts { display: flex; gap: 15px; color: #666; font-size: 14px; }
+.profile-detail-actions { display: flex; flex-direction: column; gap: 10px; min-width: 180px; }
 
-.profile-detail-avatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.profile-detail-info h3 {
-    margin: 0 0 10px 0;
-    font-size: 20px;
-    color: #333;
-}
-
-.profile-detail-contacts {
-    display: flex;
-    gap: 15px;
-    color: #666;
-    font-size: 14px;
-}
-
-.profile-detail-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.btn-action-inativar, .btn-action-excluir {
-    border: none;
-    border-radius: 20px;
-    padding: 10px 20px;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    min-width: 160px;
-}
-
-.btn-action-inativar {
-    background-color: var(--primary-dark);
-}
-
-.btn-action-excluir {
-    background-color: var(--primary-dark);
-}
-
-/* RECIPIENTE DOS CARTÕES DE DADOS */
+/* GRELHA DOS CARTÕES (Clientes e Leads lado a lado) */
 .data-cards-container {
     display: flex;
     gap: 20px;
+    flex-wrap: wrap; /* Se o ecrã for pequeno, eles empilham */
 }
 
 .data-card {
     flex: 1;
-    background-color: var(--bg-card);
-    border-radius: 8px;
+    min-width: 300px;
+    background-color: white;
+    border-radius: 12px;
     border-top: 6px solid var(--primary-dark);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     padding: 20px;
 }
 
@@ -276,60 +108,60 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f2f5;
+    padding-bottom: 15px;
     margin-bottom: 15px;
 }
 
-.data-card-header h3 {
-    margin: 0;
-    font-size: 18px;
-    color: #333;
-}
+.data-card-header h3 { margin: 0; font-size: 18px; color: #2c3e50; }
+.data-card-actions { display: flex; gap: 8px; }
 
-/* Botõezinhos redondos de ação */
-.data-card-actions {
-    display: flex;
-    gap: 8px;
-}
-
+/* Botões redondos de ação nas listas (apagar todos, inativar todos) */
 .icon-btn {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    border: none;
-    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background-color: var(--bg-card);
+    color: var(--primary-dark); /* Ícone cinza médio */
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    font-size: 12px;
-}
-
-.green-btn { background-color: var(--color-success); }
-.orange-btn { background-color: var(--color-warning); }
-.red-btn { background-color: var(--color-danger); }
-
-.empty-text {
-    color: #999;
-    font-size: 14px;
-}
-
-.data-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.data-list li {
-    padding: 10px 0;
-    border-bottom: 1px solid #f9f9f9;
-    font-size: 14px;
-}
-.filtro {
-    padding: 5px;
-    background-color: var(--bg-card);
-    border-radius: 4px;
-    border: 1px solid #ccc;
     font-size: 13px;
+    transition: all 0.2s ease;
 }
+
+.icon-btn:hover { transform: scale(1.05); }
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+/* As cores só aparecem quando passas o rato! */
+
+.green-btn:hover { background-color: var(--color-success); color: white; border-color: var(--color-success); }
+.orange-btn:hover { background-color: var(--color-warning); color: white; border-color: var(--color-warning); }
+.red-btn:hover { background-color: var(--color-danger); color: white; border-color: var(--color-danger); }
+.blue-btn:hover { background-color: #3498db; color: white; border-color: #3498db; }
+
+/* --- NOVOS BOTÕES DO PERFIL DE ADMIN --- */
+.btn-profile-action {
+    background-color: white;
+    border: 1px solid #cbd5e1;
+    color: #475569;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.btn-profile-warning:hover { background-color: #fff7ed; color: #c2410c; border-color: #fdba74; }
+.btn-profile-success:hover { background-color: #f0fdf4; color: #15803d; border-color: #86efac; }
+.btn-profile-danger:hover { background-color: #fef2f2; color: #b91c1c; border-color: #fca5a5; }

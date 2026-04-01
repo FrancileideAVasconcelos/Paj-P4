@@ -1,10 +1,10 @@
-import {useNavigate, useParams} from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useClientStore from "../store/useClientStore.js";
 import tokenStore from "../store/tokenStore.js";
-import '../styles/Client.css';
-import {useEffect, useState} from "react";
+import { useEffect } from "react";
 import FormModal from "./formModal.jsx";
 import useFormModal from "../hooks/useFormModal.js";
+import '../styles/ClientLead.css';
 
 export default function ClientDetails() {
     const { id } = useParams();
@@ -17,7 +17,6 @@ export default function ClientDetails() {
     useEffect(() => {
         if (token && id) fetchClientById(token, id);
     }, [token, id, fetchClientById]);
-
 
     const handleRemover = async () => {
         if (window.confirm("Tem a certeza que deseja remover esse cliente?")) {
@@ -34,7 +33,7 @@ export default function ClientDetails() {
 
     return (
         <div className="admin-container">
-            <button onClick={() => navigate(-1)} className="btn-toggle cancel btn-back">
+            <button onClick={() => navigate(-1)} className="btn-back">
                 <i className="fa-solid fa-arrow-left"></i> Voltar
             </button>
 
@@ -59,7 +58,7 @@ export default function ClientDetails() {
                     </div>
 
                     <div className="form-actions">
-                        <button onClick={(e) =>modalProps.abrirParaEditar(e, currentClient)} className="btn-save">
+                        <button onClick={(e) => modalProps.abrirParaEditar(e, currentClient)} className="btn-save">
                             <i className="fa-solid fa-pen"></i> Editar Detalhes
                         </button>
                         <button onClick={handleRemover} className="btn-save-red">
@@ -69,17 +68,7 @@ export default function ClientDetails() {
                 </div>
             </div>
 
-            <FormModal
-                isOpen={modalProps.modalAberto}
-                type="client"
-                initialData={modalProps.itemEmEdicao}
-                onClose={modalProps.fecharModal}
-                onSave={modalProps.handleSalvar}
-            />
+            <FormModal isOpen={modalProps.modalAberto} type="client" initialData={modalProps.itemEmEdicao} onClose={modalProps.fecharModal} onSave={modalProps.handleSalvar} />
         </div>
     );
 }
-
-
-
-

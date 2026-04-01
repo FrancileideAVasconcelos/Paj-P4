@@ -1,4 +1,4 @@
-// src/components/ListClientLeadAdmin.jsx
+import '../styles/Admin.css'
 import React from 'react';
 
 export default function ListClientLeadAdmin({
@@ -55,8 +55,8 @@ export default function ListClientLeadAdmin({
                                 </div>
 
                                 {/* BOTÕES DE AÇÃO INDIVIDUAIS */}
-                                <div className="action-buttons" style={{ display: 'flex', gap: '5px' }}>
-                                    <button className="icon-btn" style={{ backgroundColor: '#000080', color: 'white' }} title="Editar" onClick={() => onEdit && onEdit(item)}>
+                                <div className="action-buttons">
+                                    <button className="icon-btn" title="Editar" onClick={() => onEdit && onEdit(item)}>
                                         <i className="fa-solid fa-pen"></i>
                                     </button>
                                     <button className="icon-btn orange-btn" title={item.ativo ? "Inativar" : "Reativar"} onClick={() => onToggleActive && onToggleActive(item)}>

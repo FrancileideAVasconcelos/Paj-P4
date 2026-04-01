@@ -34,25 +34,34 @@ export default function Login() {
     };
 
     return (
-        <div className="login-container">
-            <h2>Login</h2>
-            <form onSubmit={handleLogin} className="custom-form">
-                <div className="form-group">
-                    <label>Username:</label>
-                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
-                </div>
-                <div className="form-group">
-                    <label>Password:</label>
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                </div>
+        <div className="login-page-container">
+            <div className="login-container">
+                <h2>Login</h2>
 
-                <button className="btn-login" type="submit">
-                    Login
-                </button>
-                <div className="registo">
-                    <p>Não tem conta? <Link to="/register">Registar</Link></p>
-                </div>
-            </form>
+                {erro && <p style={{ color: '#e74c3c', textAlign: 'center', marginBottom: '15px', fontWeight: 'bold' }}>{erro}</p>}
+
+                <form onSubmit={handleLogin} className="custom-form">
+                    <div className="form-group">
+                        <label>Username</label>
+                        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Password</label>
+                        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                    </div>
+
+                    <div className="form-actions" style={{ marginTop: '10px' }}>
+                        <button className="btn-auth" type="submit">
+                            Entrar
+                        </button>
+                    </div>
+
+                    <div className="auth-links">
+                        <p>Não tem conta? <Link to="/register">Registar</Link></p>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }

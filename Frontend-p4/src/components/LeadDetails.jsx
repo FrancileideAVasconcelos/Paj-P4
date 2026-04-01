@@ -1,12 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import useLeadStore from '../store/useLeadStore.js';
 import tokenStore from '../store/tokenStore.js';
 import { STATUS_OPTIONS } from '../utils/constants.js';
-
-import '../styles/Leads.css';
 import useFormModal from "../hooks/useFormModal.js";
 import FormModal from "./formModal.jsx";
+import '../styles/ClientLead.css';
 
 export default function LeadDetails() {
     const { id } = useParams();
@@ -19,7 +18,6 @@ export default function LeadDetails() {
     useEffect(() => {
         if (token && id) fetchLeadById(token, id);
     }, [token, id, fetchLeadById]);
-
 
     const handleRemover = async () => {
         if (window.confirm("Tem a certeza que deseja remover esta lead?")) {
@@ -36,12 +34,9 @@ export default function LeadDetails() {
 
     return (
         <div className="admin-container">
-            <div className="barra-container">
-                <h2>Detalhes da Lead</h2>
-                <button className="btn-toggle" onClick={() => navigate('/leads')}>
-                    <i className="fa-solid fa-arrow-left"></i> Voltar à Lista
-                </button>
-            </div>
+            <button className="btn-back" onClick={() => navigate('/leads')}>
+                <i className="fa-solid fa-arrow-left"></i> Voltar à Lista
+            </button>
 
             <div className="form-container">
                 <h3 className="form-title">Detalhes da Lead</h3>
@@ -73,22 +68,14 @@ export default function LeadDetails() {
                         <button onClick={(e) => modalProps.abrirParaEditar(e, currentLead)} className="btn-save">
                             <i className="fa-solid fa-pen"></i> Editar Detalhes
                         </button>
-
-                        <button onClick={handleRemover} className="btn-save-red" style={{ backgroundColor: '#e74c3c', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>
+                        <button onClick={handleRemover} className="btn-save-red">
                             <i className="fa-solid fa-trash-can"></i> Remover Lead
                         </button>
                     </div>
                 </div>
             </div>
 
-            {/* 2. O NOSSO MODAL DESENHADO NO FINAL DA PÁGINA */}
-            <FormModal
-                isOpen={modalProps.modalAberto}
-                type="lead"
-                initialData={modalProps.itemEmEdicao}
-                onClose={modalProps.fecharModal}
-                onSave={modalProps.handleSalvar}
-            />
+            <FormModal isOpen={modalProps.modalAberto} type="lead" initialData={modalProps.itemEmEdicao} onClose={modalProps.fecharModal} onSave={modalProps.handleSalvar} />
         </div>
     );
 }

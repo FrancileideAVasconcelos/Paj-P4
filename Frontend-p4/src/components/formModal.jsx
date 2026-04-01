@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
 import {STATUS_OPTIONS} from "../utils/constants.js";
-import '../styles/admin.css'; // Assume os estilos do modal que adicionámos
+import '../styles/ClientLead.css';
 
 export default function FormModal({isOpen, type, initialData, onClose, onSave}) {
     const [formData, setFormData] = useState(null);

@@ -1,162 +1,149 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box; /* Essencial para larguras exatas */
+    box-sizing: border-box;
     font-family: 'Segoe UI', sans-serif;
 }
 
-/* AsideFooterHeader.css */
-
+/* ================   HEADER ================= */
 .main-header {
     background: var(--primary-color);
-    color: white;
-    padding: 50px 30px;
-    display: flex; /* Essencial para colocar logo e botões na mesma linha */
+    color: var(--text-on-primary, white);
+    padding: 0 30px; /* Reduzido o padding vertical para respeitar a altura */
+    height: var(--header-height, 90px); /* Usa a variável que criaste no index.css */
+    display: flex;
     justify-content: space-between;
     align-items: center;
     grid-column: 1 / -1;
 }
 
-/* Container do Hambúrguer + Logo */
 .header-left {
     display: flex;
     align-items: center;
 }
 
 .logo {
-    font-size: 32px; /* Reduzi um pouco de 50px para não quebrar o layout mobile */
+    font-size: 28px;
     margin: 0;
+    font-weight: bold;
 }
-
-.menu-toggle {
-    display: none; /* Escondido no Desktop */
-    background: none;
-    border: none;
-    color: white;
-    font-size: 25px; /* Tamanho visível das 3 linhas */
-    cursor: pointer;
-    margin-right: 15px;
-    align-items: center;
-    justify-content: center;
-}
-
-@media (max-width: 768px) {
-    .layout-grid {
-        /* No mobile, o grid passa a ter apenas uma coluna */
-        grid-template-columns: 1fr;
-        grid-template-areas:
-            "header"
-            "main"
-            "footer";
-    }
-
-    .main-aside {
-        position: fixed; /* O menu sai do grid e flutua */
-        top: 0;
-        left: -100%;     /* Fica totalmente escondido à esquerda */
-        width: 250px;    /* Largura fixa para o menu mobile */
-        height: 100vh;
-        background: var(--primary-color);
-        z-index: 1001;   /* Fica à frente de tudo */
-        transition: left 0.4s ease-in-out; /* Animação suave */
-        box-shadow: 5px 0 15px rgba(0,0,0,0.3);
-    }
-
-    .menu-toggle {
-        display: flex; /* Mostra o botão no Mobile */
-    }
-
-    /* Quando o estado do React adiciona a classe .open */
-    .main-aside.open {
-        left: 0;
-    }
-
-    /* Ajuste da sidebar interna para preencher o aside mobile */
-    .sidebar {
-        width: 100%;
-        height: 100%;
-        padding-top: 60px; /* Espaço para não ficar colado ao topo */
-    }
-}
-
-@media (min-width: 769px) {
-    .main-aside {
-        position: static; /* Volta para o comportamento normal do Grid */
-        left: 0;
-        width: auto;
-        height: auto;
-        background: transparent; /* O fundo virá da .sidebar interna */
-    }
-}
-
 
 .header-actions {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
 }
-
 
 .logout-btn {
     background-color: var(--primary-dark);
-    margin : 5px;
-    padding: 3px 10px ;
-    border-radius: 12px;
-    cursor: pointer ;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px; /* Uniformizado com o auth */
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.1s;
 }
 
 .logout-btn:hover {
     background-color: var(--accent-color);
-    transition: 0.5s;
 }
 
-
-
-/* ================   Aside ================= */
-
-.sidebar button {
-    background: var(--primary-dark);
-    border-radius:12px;
-    border:none;
-    color: white;
-    padding: 15px 0;
-    gap: 10px;
-    text-align: center;
-    cursor: pointer;
-    width: 170px;
-    font-weight: 500;
-    transition: 0.3s;
+.logout-btn:active {
+    transform: scale(0.98);
 }
 
+/* ================   ASIDE (SIDEBAR) ================= */
 .sidebar {
     background: var(--primary-color);
-    width: 220px;
+    width: var(--sidebar-width, 220px);
     height: 100vh;
-    padding-top: 40px;
-    gap: 20px;
+    padding-top: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 15px;
 }
 
-.sidebar button:hover {
+.sidebar a {
+    text-decoration: none;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* Classe unificada para os botões de navegação */
+.nav-btn {
+    background: var(--primary-dark);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 0;
+    width: 85%;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.3s ease, transform 0.1s;
+}
+
+.nav-btn:hover {
     background-color: var(--accent-color);
 }
 
-/* ============= Footer =============== */
-footer {
-    background-color: #f8f9fa; /* Um cinza muito claro, limpo e moderno */
-    color: #6c757d; /* Texto num tom de cinza intermédio (não tão forte como o preto) */
-    text-align: center; /* Centra o texto perfeitamente */
-    padding: 5px 8px; /* Dá espaço acima e abaixo do texto */
-    font-size: 14px;
-    border-top: 1px solid #dee2e6; /* Uma linha muito subtil a separar o conteúdo do footer */
-    width: 100%;
-    box-sizing: border-box;
-    margin-top: auto; /* Ajuda a empurrar o footer para o fundo se a página tiver pouco conteúdo */
-    grid-column: 1 / -1;
+.nav-btn:active {
+    transform: scale(0.98);
 }
 
-/* Remove a margem padrão do parágrafo para ficar perfeitamente centrado */
+/* ================ MENU MOBILE ================ */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 25px;
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+@media (max-width: 768px) {
+    .menu-toggle { display: flex; }
+
+    .main-aside {
+        position: fixed;
+        top: var(--header-height, 90px);
+        left: -100%;
+        width: 250px;
+        height: calc(100vh - var(--header-height, 90px));
+        background: var(--primary-color);
+        z-index: 1001;
+        transition: left 0.3s ease-in-out;
+        box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+    }
+
+    .main-aside.open { left: 0; }
+
+    .sidebar { width: 100%; height: 100%; padding-top: 20px; }
+}
+
+
+/* ================   FOOTER ================= */
+footer {
+    background-color: var(--bg-footer, #f8f9fa);
+    color: var(--text-muted, #6c757d);
+    text-align: center;
+    padding: 15px;
+    font-size: 14px;
+    border-top: 1px solid #dee2e6;
+    width: 100%;
+    grid-column: 1 / -1;
+    margin-top: auto;
+}
+
 footer p {
     margin: 0;
     font-weight: 500;
